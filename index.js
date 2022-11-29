@@ -31,11 +31,21 @@ function run() {
             const result = await DataCollention.deleteOne(query)
             res.send(result)
         })
-
         app.get('/alldata/:id', async (req, res) => {
             const id = req.params.id
             const query = { _id: ObjectID(id) }
             const result = await DataCollention.findOne(query)
+            res.send(result)
+        })
+        app.get('/byUser', async (req, res) => {
+            let query = {}
+            if (req.query.email) {
+                query = {
+                    email: req.query.email
+                }
+            }
+            const cursor = DataCollention.find(query)
+            const result = await cursor.toArray()
             res.send(result)
         })
         app.post('/user', async (req, res) => {
@@ -48,6 +58,14 @@ function run() {
             const result = await userCollention.find(query).toArray()
             res.send(result)
         })
+        app.delete('/user/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: ObjectId(id) }
+            const result = await userCollention.deleteOne(query)
+            res.send(result)
+        })
+
+
         app.get('/alldatas', async (req, res) => {
             let query = {}
             if (req.query.catagory) {
@@ -70,7 +88,6 @@ function run() {
             const result = await DataCollention.insertOne(data)
             res.send(result)
         })
-
 
 
 
